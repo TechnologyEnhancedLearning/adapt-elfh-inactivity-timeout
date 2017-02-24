@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "http://jsonschema.net",
+  "properties": {
+    "pluginLocations": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "object",
+          "properties": {}
+        },
+		"course": {
+          "type":"object",
+          "properties":{
+            "_inactivityTimeout": {
+              "type": "object",
+              "required": false,
+              "legend": "Inactivity Timeout",
+              "properties": {
+                "_promptTitle":{
+                  "type": "string",
+                  "required": false,
+                  "default":"Inactivity Timeout",
+                  "title":"Prompt title",
+                  "inputType": "Text",
+                  "validators": [],
+				  "translatable": true,
+                  "help": "The title that will appear on the Inactivity Timeout popup"
+                },
+				"_promptMessage": {
+                  "type": "string",
+                  "required": true,
+                  "default": "You have been inactive on this page for 15 minutes, so your session has been terminated. To continue please close this window and re-launch the session.",
+                  "title": "Prompt message",
+                  "inputType": "Text",
+                  "validators": [],
+                  "translatable": true,
+				  "help": "The message that will appear on the  Session Timeout popup"
+                },
+				 "_timeout": {
+				  "type":"number",
+				  "required":true,
+				  "default": 15,
+				  "title": "Timeout Period (Minutes)",
+				  "inputType": "Number",
+				  "validators": ["number", "required"],
+				  "help": "Enter the time period after which the session is closed if user remains on the same page. Please update the Prompt message time to match this value."
+				}
+				
+			  }
+                
+              
+            }
+          }
+        }
+      }
+    }
+  }
+}

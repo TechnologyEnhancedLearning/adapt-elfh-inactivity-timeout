@@ -1,0 +1,17 @@
+{
+    "name": "adapt-elfh-inactivity-timeout",
+    "repository": "https://github.com/paul-mediakitchen/adapt-elfh-inactivity-timeout",
+    "framework": "^2.0.0",
+    "version": "1.0.0",
+    "homepage": "https://github.com/e-lfh/adapt-elfh-inactivity-timeout",
+    "displayName": "Inactivity Timeout",
+    "extension": "inactivity-timeout",
+    "description": "An extension that will automatically timeout a session after X minutes of inactivity",
+    "main": "/js/adapt-elfh-inactivity-timeout.js",
+    "keywords": [
+        "adapt-plugin",
+        "adapt-extension"
+    ],
+    "license": "GPLv3",
+    "targetAttribute": "_inactivityTimeout"
+}
