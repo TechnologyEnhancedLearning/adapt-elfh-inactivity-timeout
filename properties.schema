@@ -36,7 +36,7 @@
                   "inputType": "Text",
                   "validators": [],
                   "translatable": true,
-				  "help": "The message that will appear on the  Session Timeout popup"
+				  "help": "The message that will appear on the  Inactivity Timeout popup"
                 },
 				 "_timeout": {
 				  "type":"number",
