@@ -3,11 +3,11 @@
  * License - 
  * Maintainers - Paul Steven <paul@mediakitchen.co.uk>
  */
-define(function(require) {
-
-    var Adapt = require('coreJS/adapt');
-    var scorm = require('extensions/adapt-contrib-spoor/js/scorm');
-    var jQueryUIRef = require('extensions/adapt-elfh-inactivity-timeout/js/jquery-ui.min');
+define([
+    'coreJS/adapt',
+    'extensions/adapt-contrib-spoor/js/scorm',
+    'extensions/adapt-elfh-inactivity-timeout/js/jquery-ui.min'
+]), function(Adapt, scorm, jQueryUIRef)  {
 
     // If browser window is resized then re-adjust position of any dialogs
 
