@@ -5,9 +5,9 @@
  */
 define([
     'coreJS/adapt',
-    'extensions/adapt-contrib-spoor/js/scorm',
+    //'extensions/adapt-contrib-spoor/js/scorm',
     'extensions/adapt-elfh-inactivity-timeout/js/jquery-ui.min'
-]), function(Adapt, scorm, jQueryUIRef)  {
+]), function(Adapt, jQueryUIRef)  {
 
     // If browser window is resized then re-adjust position of any dialogs
 
@@ -185,8 +185,9 @@ define([
                 Adapt.trigger('drawer:closeDrawer');
 
                 Adapt.offlineStorage.set("location", Adapt.location._currentId);
-                scorm.commit();
-                scorm.finish();
+                //scorm.commit();
+                //scorm.finish();
+                Adapt.trigger("session:end");
 
                 this.onOpenTimeOutDialog();
 
