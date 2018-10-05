@@ -4,8 +4,8 @@
     "framework": "^3.0.0",
     "version": "1.0.2",
     "homepage": "https://github.com/e-lfh/adapt-elfh-inactivity-timeout",
-    "displayName": "Inactivity Timeout",
-    "extension": "inactivity-timeout",
+    "displayName": "e-LfH Inactivity Timeout",
+    "extension": "elfh-inactivity-timeout",
     "description": "An extension that will automatically timeout a session after X minutes of inactivity",
     "main": "/js/adapt-elfh-inactivity-timeout.js",
     "keywords": [
