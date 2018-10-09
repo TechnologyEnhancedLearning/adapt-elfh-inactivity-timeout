@@ -1,242 +1,152 @@
 /*
  * adapt-elfh-inactivity-timeout
- * License - 
- * Maintainers - Paul Steven <paul@mediakitchen.co.uk>
+ * License - GNU3
+ * Maintainers - Paul Steven <paul@mediakitchen.co.uk> and Ian Robinson <ian@chilli-is.co.uk>
  */
 define([
-        'coreJS/adapt',
-        //'extensions/adapt-contrib-spoor/js/scorm',
-        'extensions/adapt-elfh-inactivity-timeout/js/jquery-ui.min'
+        'coreJS/adapt'
     ],
-    function(Adapt, jQueryUIRef) {
-
-        // If browser window is resized then re-adjust position of any dialogs
-
-        $(window).resize(function() {
-            $(".ui-dialog").position({
-                my: "center",
-                at: "center",
-                of: window
-            });
-        });
-
+    function(Adapt) {
 
         var InactivityTimeout = _.extend({
 
-            resetTimer: null, // variable to hold the final 60 second setInterval result
-            pollInterval: 10000, // How frequently to check for session expiration in milliseconds			
-            expirationMinutes: 10, // How many minutes the session is valid for (this is overridden by AT value)
-            intervalID: null,
-            lastActivity: null,
+                pollIntervalPeriod: 5000, // How frequently to check for session expiration in milliseconds			
+                expirationMinutes: null, // How many minutes the session is valid for (this is overridden by AT value)
+                activityCheckInterval: null,
 
-            counterPeriod: 60, // Number of seconds the countdown starts on	
-            dialog: {},
+                lastActivityDateTime: new Date(),
 
-            initialize: function() {
+                dialog: {
+                    updateDialogCounterInterval: null,
+                    max: 10,
+                    value: 10
+                },
 
-                _.bindAll(this, "onResetTimer", "resetCountdown", "onKeepSessionOpen", "startResetCountdown", "sessInterval");
+                promptObject: {},
 
-                this.lastActivity = new Date();
-                this.setupEventListeners();
-                this.dialog.counter = this.counterPeriod;
-                this.setSessionInterval();
+                initialize: function() {
 
+                    _.bindAll(this, "setupEventListeners", "onResetTimer", "setupModel", "startActivityCheckInterval", "isUserInactive", "checkUserIsStillThere", "updateDialogCounter");
 
-            },
+                    this.setupEventListeners();
 
-            setupEventListeners: function() {
+                    Adapt.trigger('timeout:startActivityTimer');
 
+                },
 
-                this.listenToOnce(Adapt, "app:dataLoaded", this.setupModel);
-                this.listenTo(Adapt, "remove", this.onResetTimer);
+                setupEventListeners: function() {
 
+                    this.listenToOnce(Adapt, "app:dataLoaded", this.setupModel);
+                    this.listenTo(Adapt, "remove", this.onResetTimer);
+                    this.listenTo(Adapt, "timeout:startActivityTimer", this.startActivityCheckInterval);
 
-                $('body').on('click keypress mousewheel touchmove mousedown', this.onResetTimer);
+                    $('body').on('click keypress mousewheel touchmove mousemove mousedown', this.onResetTimer);
 
-            },
+                },
 
+                onResetTimer: function(evt) {
 
+                    this.lastActivityDateTime = new Date();
+                },
 
-            onResetTimer: function(evt) {
+                setupModel: function() {
 
+                    this.model = Adapt.course.get('_elfhInactivityTimeout');
+                    this.expirationMinutes = this.model._timeout;
 
-                this.lastActivity = new Date();
+                },
 
-            },
+                startActivityCheckInterval: function() {
 
+                    this.lastActivityDateTime = new Date();
 
+                    // clear any old intervals running, just in case
+                    clearInterval(this.dialog.updateDialogCounterInterval);
+                    clearInterval(this.activityCheckInterval);
 
-            setupModel: function() {
+                    this.activityCheckInterval = setInterval(this.isUserInactive, this.pollIntervalPeriod);
 
-                this.model = Adapt.course.get('_elfhInactivityTimeout');
-                this.expirationMinutes = this.model._timeout;
+                },
 
-            },
+                // has the user not done anything for a while?
+                isUserInactive: function() {
 
+                    var now = new Date();
+                    var diff = now - this.lastActivityDateTime;
+                    var diffMins = (diff / 1000 / 60);
 
+                    if (diffMins >= Number(this.expirationMinutes - 1)) {
 
-            setSessionInterval: function(settings) {
+                        clearInterval(this.activityCheckInterval);
+                        this.checkUserIsStillThere();
+                    }
 
-                this.intervalID = setInterval(this.sessInterval, this.pollInterval);
+                },
 
-            },
+                checkUserIsStillThere: function() {
 
+                    this.dialog.value = this.dialog.max;
 
-            sessInterval: function(settings) {
-
-                var now = new Date();
-                var diff = now - this.lastActivity;
-                var diffMins = (diff / 1000 / 60);
-
-                if (diffMins >= Number(this.expirationMinutes - 1)) {
-
-                    this.onOpenDialog();
-                    clearInterval(this.intervalID);
-
-                }
-
-
-            },
-
-
-            onOpenDialog: function() {
-
-                var self = this;
-
-
-                // add html
-                $("<div/>", { id: "timeoutDialog", style: "margin:0 auto;" }).appendTo("body")
-
-                $("<p/>", { text: "We've noticed that you have been on this page for over " + (this.expirationMinutes - 1) + " minutes." }).appendTo("#timeoutDialog");
-
-                $("#timeoutDialog").append("<p>If you wish to keep the session open, select the OK button below.  Otherwise this session will close automatically in&nbsp;<strong><span id='resetCountdown' style='color: #dd0000;'>" + this.dialog.counter + "</span></strong>&nbsp;seconds.</p>");
-
-
-                $("#timeoutDialog").dialog({
-                        autoOpen: true,
-                        modal: true,
-                        closeOnEscape: false,
-                        width: "60%",
-                        title: "Session About To Close",
-                        position: { my: "center", at: "center", of: window },
-                        draggable: false,
-                        resizable: false,
-                        buttons: [{
-                            text: "OK",
-                            click: function() {
-                                self.onKeepSessionOpen();
-                            }
+                    this.promptObject = {
+                        body: "<div style='font-size:1.2em; text-align:center;'><p>You have been inactive for over " + (this.expirationMinutes - 1) + " minutes.</p>" +
+                            "<p>The session will timeout in <strong><span id='resetCountdown'>" + this.dialog.value + "</span></strong>&nbsp;seconds.</p>" +
+                            "</div>",
+                        _prompts: [{
+                            promptText: "Do not timeout my session",
+                            _callbackEvent: "timeout:startActivityTimer"
                         }],
+                        _showIcon: false,
+                        _isCancellable: false
+                    };
 
+                    Adapt.trigger('notify:close');
+                    Adapt.trigger('notify:prompt', this.promptObject);
 
-                        open: function(event, ui) {
+                    // start timer interval for updating countdown in dialog box
+                    this.dialog.updateDialogCounterInterval = setInterval(this.updateDialogCounter, 1000);
 
-                            // hide the small close "x" in the window						
-                            $(event.target).parent().find('.ui-dialog-titlebar-close').hide();
+                },
 
-                            self.startResetCountdown();
+                updateDialogCounter: function() {
 
-                        },
-                        close: function(event, ui) {
+                    this.dialog.value--;
 
-                            $(this).dialog('destroy').remove(); // remove() removes the #timeoutDialog div from the DOM
-                        }
+                    if (this.dialog.value <= 0) {
+
+                        // remove timer
+                        clearInterval(this.dialog.updateDialogCounterInterval);
+
+                        // Remove countdown timer message box
+                        Adapt.trigger('notify:close', this.promptObject);
+
+                        // Close Drawer (Not really necessary)
+                        Adapt.trigger('drawer:closeDrawer');
+
+                        var popupObj = {
+                            body: "<div style='font-size:1.2em; text-align:center;'>" + this.model._timedOutMessage + "</div>",
+                            _isCancellable: false,
+                            _showIcon: false
+                        };
+
+                        Adapt.trigger('notify:popup', popupObj);
+
+                        Adapt.offlineStorage.set("location", Adapt.location._currentId);
+
+                        // tell the other session components that this session has finished
+                        Adapt.trigger('scorm:finish');
+
+                    } else {
+
+                        // Update the html to show the updated countdown value
+                        $("#resetCountdown").html(this.dialog.value);
+
                     }
 
-                )
-            },
-
-
-            onKeepSessionOpen: function() {
-
-                // Remove the dialog box that has the X second countdown
-                $("#timeoutDialog").dialog("close");
-
-                clearInterval(this.resetTimer);
-
-                // Reset the counter value that appears on the countdown dialog box
-                this.dialog.counter = this.counterPeriod;
-
-                // Reset last activity value 
-                this.lastActivity = new Date();
-
-                // Start checking for idle
-                this.setSessionInterval();
-            },
-
-
-            startResetCountdown: function() {
-
-                this.resetTimer = setInterval(this.resetCountdown, 1000);
-            },
-
-
-            resetCountdown: function() {
-
-                this.dialog.counter = this.dialog.counter - 1;
-
-                if (this.dialog.counter <= 0) {
-
-                    // remove timer
-                    clearInterval(this.resetTimer);
-
-                    $("#timeoutDialog").dialog("close");
-
-                    // Close Drawer (Not really necessary)
-                    Adapt.trigger('drawer:closeDrawer');
-
-                    Adapt.offlineStorage.set("location", Adapt.location._currentId);
-                    //scorm.commit();
-                    //scorm.finish();
-                    Adapt.trigger("session:end");
-
-                    this.onOpenTimeOutDialog();
-
-                } else {
-
-                    // Update the html to show the updated countdown value
-                    $("#resetCountdown").html(this.dialog.counter);
 
                 }
 
             },
-
-
-            onOpenTimeOutDialog: function() {
-
-                $("<div/>", { id: "endOfSessionTimeOutDialog", style: "margin:0 auto;" }).appendTo("body");
-
-                $("<p/>", { text: this.model._promptMessage }).appendTo("#endOfSessionTimeOutDialog");
-
-                $("#endOfSessionTimeOutDialog").dialog({
-                        autoOpen: true,
-                        modal: true,
-                        closeOnEscape: false,
-                        width: "80%",
-                        title: "Session Timeout",
-                        position: { my: "center", at: "center", of: window },
-                        draggable: false,
-                        resizable: false,
-                        open: function(event, ui) {
-
-                            // hide the small close "x" in the window						
-                            $(event.target).parent().find('.ui-dialog-titlebar-close').hide();
-
-                        },
-                        close: function(event, ui) {
-
-                            $(this).dialog('destroy').remove(); // remove() removes the #timeoutDialog div from the DOM
-                        }
-                    }
-
-                )
-
-            },
-
-
-
-        }, Backbone.Events);
-
+            Backbone.Events);
 
         InactivityTimeout.initialize();
 

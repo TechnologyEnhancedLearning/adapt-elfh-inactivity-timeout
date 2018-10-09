@@ -1,7 +1,6 @@
 {
     "name": "adapt-elfh-inactivity-timeout",
-    "repository": "git://github.com/e-lfh/adapt-elfh-inactivity-timeout.git",
-    "framework": "^3.0.0",
+    "framework": ">=3",
     "version": "1.0.2",
     "homepage": "https://github.com/e-lfh/adapt-elfh-inactivity-timeout",
     "displayName": "e-LfH Inactivity Timeout",
