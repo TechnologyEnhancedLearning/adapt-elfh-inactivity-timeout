@@ -128,7 +128,7 @@ define([
                             _showIcon: false
                         };
 
-                        Adapt.trigger('notify:popup', popupObj);
+                        Adapt.trigger('notify:prompt', popupObj);
 
                         Adapt.offlineStorage.set("location", Adapt.location._currentId);
 
