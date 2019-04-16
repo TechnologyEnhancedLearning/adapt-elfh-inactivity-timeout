@@ -18,8 +18,8 @@ define([
 
                 dialog: {
                     updateDialogCounterInterval: null,
-                    max: 10,
-                    value: 10
+                    max: 60,
+                    value: 60
                 },
 
                 promptObject: {},
