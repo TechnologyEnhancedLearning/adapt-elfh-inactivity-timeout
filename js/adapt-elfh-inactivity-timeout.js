@@ -11,7 +11,7 @@ define([
         var InactivityTimeout = _.extend({
 
                 pollIntervalPeriod: 5000, // How frequently to check for session expiration in milliseconds			
-                expirationMinutes: 15, // How many minutes the session is valid for 
+                expirationMinutes: 15, // How many minutes the session is valid for (this is overridden by AT value)
                 activityCheckInterval: null,
 
                 lastActivityDateTime: new Date(),
@@ -81,7 +81,7 @@ define([
                     this.dialog.value = this.dialog.max;
 
                     this.promptObject = {
-                        body: "<div class 'customNotifyStyle' style='font-size:1.2em; text-align:center;'><p>You have been inactive for over 14 minutes.</p>" +
+                        body: "<div class'customNotifyStyle' style='font-size:1.2em; text-align:center;'><p>You have been inactive for over " + "14" + " minutes.</p>" +
                             "<p>The session will timeout in <strong><span id='resetCountdown'>" + this.dialog.value + "</span></strong>&nbsp;seconds.</p>" +
                             "</div>",
                         _prompts: [{
@@ -117,7 +117,7 @@ define([
                         Adapt.trigger('drawer:closeDrawer');
 
                         var popupObj = {
-                            body: "<div style='font-size:1.2em; text-align:center;'><p>You have been inactive on this page for over 15 minutes, so your session has been terminated.</p><p>To continue please close this window and re-launch the session.</p></div>",
+                            body: "<div style='font-size:1.2em; text-align:center;'>" + "<p>You have been inactive on this page for over 15 minutes, so your session has been terminated.</p>" + "<p>To continue please close this window and re-launch the session.</p>" + "</div>",
                             _isCancellable: false,
                             _showIcon: false
                         };
