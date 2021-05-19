@@ -24,9 +24,16 @@
                   "title": "Is Enabled",
                   "inputType": "Checkbox",
                   "help": "Controls whether the e-LfH Inactivity Timeout extension is enabled or disabled."
-                },          
-			        }                            }
+                }         
+				          
+               
+				
+			  }
+                
+              
+            }
           }
+        }
       }
     }
   }
