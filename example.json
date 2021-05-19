@@ -1,0 +1,5 @@
+// course.json
+"_elfhInactivityTimeout": {
+    "_timeout": 15,
+    "_timedOutMessage": "You have been inactive on this page for 15 minutes, so your session has been terminated. To continue please close this window and re-launch the session."
+},
