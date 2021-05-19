@@ -1,10 +1,10 @@
 # adapt-elfh-inactivity-timeout
 
-Displays an inactivity time-out message after 15 minutes of idle time.
-
-User is then given 60 seconds in which to respond otherwise the session is closed.
+Times out session after 15 minutes of user being idle.
 
 A warning message appears after 14 minutes to warn user the session will be closed in 60 seconds unless they respond.
+
+User is then given 60 seconds in which to respond otherwise the session is closed.
 
 After session is closed, user is instructed to close the window and restart the session.
 
