@@ -27,7 +27,7 @@ define([
 
                 initialize: function() {
 
-                    _.bindAll(this, "setupEventListeners", "onResetTimer", "setupModel", "startActivityCheckInterval", "isUserInactive", "checkUserIsStillThere", "updateDialogCounter");
+                    _.bindAll(this, "setupEventListeners", "onResetTimer", "startActivityCheckInterval", "isUserInactive", "checkUserIsStillThere", "updateDialogCounter");
 
                     this.setupEventListeners();
 
@@ -45,7 +45,6 @@ define([
                 },
 
                 onResetTimer: function(evt) {
-
                     this.lastActivityDateTime = new Date();
                 },
 
@@ -119,7 +118,7 @@ define([
                         Adapt.trigger('drawer:closeDrawer');
 
                         var popupObj = {
-                            body: "<div style='font-size:1.2em; text-align:center;'>" + this.model._timedOutMessage + "</div>",
+                            body: "<div style='font-size:1.2em; text-align:center;'><p>You have been inactive on this page for over 15 minutes, so your session has been terminated.</p><p>To continue please close this window and re-launch the session.</p></div>",
                             _isCancellable: false,
                             _showIcon: false
                         };
