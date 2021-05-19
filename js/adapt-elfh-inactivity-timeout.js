@@ -13,6 +13,7 @@ define([
                 pollIntervalPeriod: 5000, // How frequently to check for session expiration in milliseconds			
                 expirationMinutes: null, // How many minutes the session is valid for (this is overridden by AT value)
                 activityCheckInterval: null,
+                expirationMinutes = 15,
 
                 lastActivityDateTime: new Date(),
 
@@ -36,7 +37,6 @@ define([
 
                 setupEventListeners: function() {
 
-                    this.listenToOnce(Adapt, "app:dataLoaded", this.setupModel);
                     this.listenTo(Adapt, "remove", this.onResetTimer);
                     this.listenTo(Adapt, "timeout:startActivityTimer", this.startActivityCheckInterval);
 
@@ -49,12 +49,7 @@ define([
                     this.lastActivityDateTime = new Date();
                 },
 
-                setupModel: function() {
 
-                    this.model = Adapt.course.get('_elfhInactivityTimeout');
-                    this.expirationMinutes = this.model._timeout;
-
-                },
 
                 startActivityCheckInterval: function() {
 
@@ -88,7 +83,7 @@ define([
                     this.dialog.value = this.dialog.max;
 
                     this.promptObject = {
-                        body: "<div class'customNotifyStyle' style='font-size:1.2em; text-align:center;'><p>You have been inactive for over " + (this.expirationMinutes - 1) + " minutes.</p>" +
+                        body: "<div class'customNotifyStyle' style='font-size:1.2em; text-align:center;'><p>You have been inactive for over 14 minutes.</p>" +
                             "<p>The session will timeout in <strong><span id='resetCountdown'>" + this.dialog.value + "</span></strong>&nbsp;seconds.</p>" +
                             "</div>",
                         _prompts: [{

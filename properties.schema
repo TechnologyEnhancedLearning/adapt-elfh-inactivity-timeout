@@ -24,31 +24,8 @@
                   "title": "Is Enabled",
                   "inputType": "Checkbox",
                   "help": "Controls whether the e-LfH Inactivity Timeout extension is enabled or disabled."
-                },                
-				          "_timedOutMessage": {
-                  "type": "string",
-                  "required": true,
-                  "default": "<p>You have been inactive on this page for over 15 minutes, so your session has been terminated.</p><p>To continue please close this window and re-launch the session.</p>",
-                  "title": "Timed out message",
-                  "inputType": "TextArea",
-                  "validators": [],
-                  "translatable": true,
-				          "help": "The message that will appear to the user when the session times out."
-                },
-                "_timeout": {
-                  "type":"number",
-                  "required":true,
-                  "default": 15,
-                  "title": "Timeout Period (Minutes)",
-                  "inputType": "Number",
-                  "validators": ["number", "required"],
-                  "help": "Enter the time period after which the session is closed if user remains on the same page. Please update the Prompt message time to match this value."
-                }
-				
-			  }
-                
-              
-            }
+                },          
+			        }                            }
           }
         }
       }
