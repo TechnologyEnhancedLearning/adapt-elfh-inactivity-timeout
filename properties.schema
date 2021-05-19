@@ -10,7 +10,7 @@
           "type": "object",
           "properties": {}
         },
-		    "course": {
+		"course": {
           "type":"object",
           "properties":{             
             "_elfhInactivityTimeout": {
@@ -24,12 +24,16 @@
                   "title": "Is Enabled",
                   "inputType": "Checkbox",
                   "help": "Controls whether the e-LfH Inactivity Timeout extension is enabled or disabled."
-                }  //_isEnabled       
-			        } // properties
-            } // _elfhInactivityTimeout
-          } // properties
-        } // course
-      } // properties
-    } // pluginLocations
-  } // properties
+                }
+                
+				
+			  }
+                
+              
+            }
+          }
+        }
+      }
+    }
+  }
 }
