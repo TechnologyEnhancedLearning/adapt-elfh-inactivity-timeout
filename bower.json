@@ -5,7 +5,7 @@
     "homepage": "https://github.com/e-lfh/adapt-elfh-inactivity-timeout",
     "displayName": "e-LfH Inactivity Timeout",
     "extension": "elfhInactivityTimeout",
-    "description": "An extension that will automatically timeout a session after X minutes of inactivity",
+    "description": "An extension that will automatically timeout a session after 15 minutes of inactivity",
     "main": "/js/adapt-elfh-inactivity-timeout.js",
     "keywords": [
         "adapt-plugin",

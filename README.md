@@ -13,7 +13,7 @@ After session is closed, user is instructed to close the window and restart the 
 ---
 
 <a href="https://community.adaptlearning.org/" target="_blank"><img alt="@e-LfH" class="TableObject-item avatar" height="100" itemprop="image" src="https://avatars2.githubusercontent.com/u/30687181?v=4&amp;s=200" align="right"/></a>
-**Version number:** 1.0.3
+**Version number:** 1.0.5
 **Framework versions:** 3
 **Author / maintainer:** e-Learning For Healthcare with [contributors](https://github.com/e-LfH/adapt-elfh-inactivity-timeout/graphs/contributors)
 **Accessibility support:** n/a
